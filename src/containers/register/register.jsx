@@ -43,11 +43,12 @@ export default class Register extends Component {
                 <Logo />
                 <WingBlank>
                     <List>
-                        <InputItem onChange={val => {this.handleChange('username', val)}}>用户名:</InputItem>
                         <WhiteSpace />
-                        <InputItem type="password" onChange={val => {this.handleChange('password', val)}}>密&nbsp;&nbsp;&nbsp;码:</InputItem>
+                        <InputItem placeholder='请输入用户名' onChange={val => {this.handleChange('username', val)}}>用户名:</InputItem>
                         <WhiteSpace />
-                        <InputItem type="password" onChange={val => {this.handleChange('password2', val)}}>确认密码:</InputItem>
+                        <InputItem placeholder='请输入密码' type="password" onChange={val => {this.handleChange('password', val)}}>密&nbsp;&nbsp;&nbsp;码:</InputItem>
+                        <WhiteSpace />
+                        <InputItem placeholder='请输入确认密码' type="password" onChange={val => {this.handleChange('password2', val)}}>确认密码:</InputItem>
                         <WhiteSpace />
                         <ListItem>
                             <span>用户类型:</span>
