@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "antd-mobile": "^2.3.4",
+    "axios": "^0.24.0",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
     "react-redux": "^6.0.0",
