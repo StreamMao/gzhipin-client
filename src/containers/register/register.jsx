@@ -8,21 +8,25 @@ import {
     Radio,
     Button
 } from 'antd-mobile'
-import Logo from  '../../components/logo/logo'
+import {connect} from 'react-redux'
+import { Redirect } from 'react-router-dom'
 
+import {register} from '../../redux/actions'
+import Logo from  '../../components/logo/logo'
 
 const ListItem = List.Item;
 
-export default class Register extends Component {
+class Register extends Component {
     state = {
         username:'',
         password:'',
         password2:'',
         type:'dashen', 
     }
-    
+    //点击注册调用的函数
     register = () => {
-        console.log(this.state)
+        //console.log(this.state)
+        this.props.register(this.state)
     }
 
     handleChange = (name, val) => {
@@ -37,12 +41,19 @@ export default class Register extends Component {
     
     render () {
         const {type} = this.state
+        const {msg, redirectTo} = this.props.user
+        //如果redirectTo有值，就需要重定向到指定的路由
+        if(redirectTo) {
+            return <Redirect to={redirectTo}/>
+        }
+
         return (
             <div>
                 <NavBar>硅&nbsp;谷&nbsp;直&nbsp;聘</NavBar>
                 <Logo />
                 <WingBlank>
                     <List>
+                        {msg? <div className="error-msg">{msg}</div> : null}
                         <WhiteSpace />
                         <InputItem placeholder='请输入用户名' onChange={val => {this.handleChange('username', val)}}>用户名:</InputItem>
                         <WhiteSpace />
@@ -66,3 +77,8 @@ export default class Register extends Component {
         )
     }
 }
+
+export default connect(
+    state => ({user: state.user}),
+    {register}
+)(Register)

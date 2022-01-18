@@ -10,12 +10,13 @@ const initUser = {
     username:'',
     type: '',
     msg: '',//错误提示信息
+    redirectTo:''//需要自动重定向的路由路径
 }
 
 function user(state=initUser, action) {
     switch(action.type) {
         case AUTH_SUCCESS: //data is user
-            return {...state, ...action.data}
+            return {...action.data, redirectTo: '/'}
         case ERROR_MSG: //data is msg
             return {...state, msg:action.data}
         default:

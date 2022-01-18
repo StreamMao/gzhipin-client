@@ -9,15 +9,15 @@ export default function ajax(url, data={}, type='GET') {
         Object.keys(data).forEach(key => {
             dataStr += key + '=' + data[key] + "&"
         })
-        if (dataStr) {
+        if (dataStr !== '') {
             dataStr = dataStr.substring(0, dataStr.length - 1)
         }
         //使用axios发送get请求
         return axios.get(url + '?' + dataStr)
     } else {// 发送post请求
         //使用axios发送post请求
+        // const a = axios.post(url, data)
+        // console.log(a)
         return axios.post(url, data)
     }
-    
-    
 }

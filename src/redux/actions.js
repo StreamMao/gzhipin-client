@@ -5,13 +5,22 @@ import {reqRegister, reqLogin} from '../api'
 //授权成功的同步action
 const authSuccess = (user) => ({type: AUTH_SUCCESS, data: user})
 //错误提示信息的同步action
-const errorMsg = (msg) => ({type: ERROR_MSG, data: user})
+const errorMsg = (msg) => ({type: ERROR_MSG, data: msg})
 
 //注册异步action
 export const register = (user) => {
+    const {username, password, password2, type} = user
+    //做表单的前排验证，如果不通过，分发一个errMsg的同步action
+    if(!username) {
+        return errorMsg('Please input the username!')
+    } else if(password != password2) {
+        return errorMsg('password does not match!')
+    }
+    //表单数据和发，返回一个ajax请求的一异步action函数
+    
     return async dispatch => {
         //发送注册的异步ajax请求
-       
+
         /* 
         //用promise的写法，此时所在函数不需要声明为async
         const promise = reqRegister(user) 
@@ -21,20 +30,28 @@ export const register = (user) => {
         */
         
         //用async, await的写法
-        const response = await reqRegister(user) //reqRegister()返回promise, 用await表示“等”response,可以直接得到response. 声明await的语句所在的函数就必须声明成async
+        const response = await reqRegister({username, password, type}) //reqRegister()返回promise, 用await表示“等”response,可以直接得到response. 声明await的语句所在的函数就必须声明成async
         const result = response.data
         if (result.code == 0) { //成功
             //授权成功的同步action
             dispatch(authSuccess(result.data))
         } else { //失败
             // 分发错误提示信息的同步action
-            dispatch(errorMsh(result.msg))
+            dispatch(errorMsg(result.msg))
         }
     }
 }
 
 //登录异步action
 export const login = (user) => {
+    const {username, password} = user
+    //做表单的前排验证，如果不通过，分发一个errMsg的同步action
+    if(!username) {
+        return errorMsg('Please input the username!')
+    } else if(!password) {
+        return errorMsg('Please input the password!')
+    }
+    
     return async dispatch => {
         //发送注册的异步ajax请求
        
@@ -54,7 +71,7 @@ export const login = (user) => {
             dispatch(authSuccess(result.data))
         } else { //失败
             // 分发错误提示信息的同步action
-            dispatch(errorMsh(result.msg))
+            dispatch(errorMsg(result.msg))
         }
     }
 }
