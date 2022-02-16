@@ -13,7 +13,7 @@ export const register = (user) => {
     //做表单的前排验证，如果不通过，分发一个errMsg的同步action
     if(!username) {
         return errorMsg('Please input the username!')
-    } else if(password != password2) {
+    } else if(password !== password2) {
         return errorMsg('password does not match!')
     }
     //表单数据和发，返回一个ajax请求的一异步action函数
@@ -32,7 +32,7 @@ export const register = (user) => {
         //用async, await的写法
         const response = await reqRegister({username, password, type}) //reqRegister()返回promise, 用await表示“等”response,可以直接得到response. 声明await的语句所在的函数就必须声明成async
         const result = response.data
-        if (result.code == 0) { //成功
+        if (result.code === 0) { //成功
             //授权成功的同步action
             dispatch(authSuccess(result.data))
         } else { //失败
@@ -66,7 +66,7 @@ export const login = (user) => {
         //用async, await的写法
         const response = await reqLogin(user) //reqRegister()返回promise, 用await表示“等”response,可以直接得到response. 声明await的语句所在的函数就必须声明成async
         const result = response.data
-        if (result.code == 0) { //成功
+        if (result.code === 0) { //成功
             //授权成功的同步action
             dispatch(authSuccess(result.data))
         } else { //失败
