@@ -40,7 +40,7 @@ export default class AvatarSelector extends Component {
         const {icon} = this.state
         const listHeader= !icon ? "Please select a avatar" : (
             <div>
-                Avatar Selected:<img src={icon} />
+                Avatar Selected:<img src={icon} alt="avatar"/>
             </div>
         )
         return (

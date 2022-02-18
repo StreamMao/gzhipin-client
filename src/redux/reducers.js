@@ -6,6 +6,8 @@ import {
     ERROR_MSG
 } from './action-types'
 
+import {getRedirectTo} from '../utils'
+
 const initUser = {
     username:'',
     type: '',
@@ -16,7 +18,8 @@ const initUser = {
 function user(state=initUser, action) {
     switch(action.type) {
         case AUTH_SUCCESS: //data is user
-            return {...action.data, redirectTo: '/'}
+            const {type, avatar} = action.data
+            return {...action.data, redirectTo: getRedirectTo(type, avatar)}
         case ERROR_MSG: //data is msg
             return {...state, msg:action.data}
         default:
@@ -30,3 +33,4 @@ function user(state=initUser, action) {
 export default combineReducers({
     user
 })
+
