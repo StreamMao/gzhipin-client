@@ -5,6 +5,7 @@
   "dependencies": {
     "antd-mobile": "^2.3.4",
     "axios": "^0.24.0",
+    "js-cookie": "^3.0.1",
     "prop-types": "^15.8.1",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
