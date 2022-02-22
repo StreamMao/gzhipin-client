@@ -3,7 +3,9 @@
 import {combineReducers} from 'redux'
 import {
     AUTH_SUCCESS,
-    ERROR_MSG
+    ERROR_MSG,
+    RECEIVE_USER,
+    RESET_USER
 } from './action-types'
 
 import {getRedirectTo} from '../utils'
@@ -15,6 +17,7 @@ const initUser = {
     redirectTo:''//需要自动重定向的路由路径
 }
 
+//产生user状态的reducer
 function user(state=initUser, action) {
     switch(action.type) {
         case AUTH_SUCCESS: //data is user
@@ -22,6 +25,11 @@ function user(state=initUser, action) {
             return {...action.data, redirectTo: getRedirectTo(type, avatar)}
         case ERROR_MSG: //data is msg
             return {...state, msg:action.data}
+        case RECEIVE_USER: //data is user
+            return action.data
+        case RESET_USER: //data is msg
+            return {...initUser, msg:action.data}
+
         default:
             return state
     }

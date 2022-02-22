@@ -4,8 +4,10 @@
 
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
+import {Redirect} from 'react-router-dom'
 import {NavBar, InputItem, TextareaItem, Button} from 'antd-mobile'
 import AvatarSelector from '../../components/avatar-selector/avatar-selector'
+import {updateUser} from '../../redux/actions'
 
 class DashenInfo extends Component {
 
@@ -28,10 +30,16 @@ class DashenInfo extends Component {
     }
 
     save = () => {
-        console.log(this.state)
+        this.props.updateUser(this.state)
     }
 
     render () {
+        //如果信息已经完善，自动重定向到对应的主界面
+        const {avatar, type} = this.props.user
+        if (avatar) { //说明信息已经完善  
+            const path = type === 'dashen' ? '/dashen':'/laoban'
+            return <Redirect to={path}/>
+        }
         return (
             <div>
                 <NavBar>大神信息完善</NavBar>
@@ -47,7 +55,7 @@ class DashenInfo extends Component {
 }
 
 export default connect (
-    state => ({}),
-    {}
+    state => ({user:state.user}),
+    {updateUser}
 )(DashenInfo)
 
