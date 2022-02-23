@@ -37,7 +37,7 @@ class LaobanInfo extends Component {
     }
     
     render () {
-        //如果信息已经完善，自动重定向到对应的主界面
+        // 如果信息已经完善，自动重定向到对应的主界面
         const {avatar, type} = this.props.user
         if (avatar) { //说明信息已经完善  
             const path = type === 'dashen' ? '/dashen':'/laoban'
@@ -62,6 +62,7 @@ class LaobanInfo extends Component {
 
 export default connect (
     state => ({user:state.user}),
+    // state => ({}),
     {updateUser}
 )(LaobanInfo)
 

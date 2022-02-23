@@ -29,7 +29,6 @@ function user(state=initUser, action) {
             return action.data
         case RESET_USER: //data is msg
             return {...initUser, msg:action.data}
-
         default:
             return state
     }

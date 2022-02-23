@@ -7,6 +7,7 @@ import ajax from "./ajax"
 export const reqRegister = (user) => ajax('/register', user, 'POST')
 //login接口
 export const reqLogin = (user) => ajax('/login', user, 'POST')
-
 //update user接口
 export const reqUpdateUser = (user) => ajax('/update', user, 'POST')
+//get user information
+export const reqUser = () => ajax('/user')

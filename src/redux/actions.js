@@ -1,6 +1,10 @@
 // including a few action creators
 import { AUTH_SUCCESS, ERROR_MSG, RECEIVE_USER, RESET_USER } from './action-types'
-import {reqRegister, reqLogin, reqUpdateUser} from '../api'
+import {reqRegister, 
+        reqLogin, 
+        reqUpdateUser, 
+        reqUser
+    } from '../api'
 
 //授权成功的同步action
 const authSuccess = (user) => ({type: AUTH_SUCCESS, data: user})
@@ -83,11 +87,25 @@ export const login = (user) => {
 //更新用户异步actjion
 export const updateUser = (user) => {
     return async dispatch => {
-        const response = await reqUpdateUser(user)
+        const response = await reqUpdateUser(user)//通过设置好的api向服务器发请求
         const result = response.data
         if (result.code===0) {//更新成功：data
             dispatch(receiveUser(result.data))
         } else {//更新失败：msg
+            dispatch(resetUser(result.msg))
+        }
+    }
+}
+
+//获取用户异步action
+export const getUser = () => {
+    return async dispatch => {
+        //执行异步ajax请求
+        const response = await reqUser()
+        const result = response.data
+        if(result.code===0) {//成功
+            dispatch(receiveUser(result.data))
+        } else {//失败
             dispatch(resetUser(result.msg))
         }
     }

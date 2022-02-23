@@ -7,6 +7,7 @@ import LaobanInfo from '../laoban-info/laoban-info'
 import DashenInfo from '../dashen-info/dashen-info'
 
 import {getRedirectTo} from '../../utils'
+import {getUser} from '../../redux/actions'
 
 class Main extends Component {
 
@@ -17,6 +18,7 @@ class Main extends Component {
         if (userid && !_id) {
             //发送异步请求，从后端获取user信息
             console.log('发送ajax请求获取user')
+            this.props.getUser()
         }
     }
 
@@ -25,7 +27,7 @@ class Main extends Component {
         const userid = Cookies.get('userid')
         //如果cookie中没有userid，自动重定向到登陆界面
         if (!userid) {
-            return <Redirect to='login'/>
+            return <Redirect to='/login'/>
         }
         //如果有cookie中有userid，接着读取redux中的user state
         const {user} = this.props
@@ -55,7 +57,8 @@ class Main extends Component {
 }
 
 export default connect(
-    state => ({user:state.user})
+    state => ({user:state.user}),
+    {getUser}
 )(Main)
 
 /*
