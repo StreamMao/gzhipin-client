@@ -100,7 +100,7 @@ class Main extends Component {
         return (
             <div>
                 {/* //控制导航头部出不出现 */}
-                {currentNav ? <NavBar>{currentNav.title}</NavBar> : null} 
+                {currentNav ? <NavBar className="sticky-header">{currentNav.title}</NavBar> : null} 
                 <Switch>
                     {
                         navList.map(nav => <Route key={nav.path} path={nav.path} component={nav.component}/>)
