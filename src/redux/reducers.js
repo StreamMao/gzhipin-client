@@ -52,4 +52,5 @@ export default combineReducers({
     user,
     userList
 })
+//向外暴露状态的结构：{user:{}, userList:[]}
 

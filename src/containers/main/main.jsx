@@ -103,7 +103,7 @@ class Main extends Component {
                 {currentNav ? <NavBar>{currentNav.title}</NavBar> : null} 
                 <Switch>
                     {
-                        navList.map(nav => <Route path={nav.path} component={nav.component}/>)
+                        navList.map(nav => <Route key={nav.path} path={nav.path} component={nav.component}/>)
                     }
                     <Route path='/laobaninfo' component={LaobanInfo}/>
                     <Route path='/dasheninfo' component={DashenInfo}/>
