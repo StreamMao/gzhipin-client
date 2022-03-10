@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { NavBar, List, InputItem } from "antd-mobile";
+import { NavBar, List, InputItem, Grid } from "antd-mobile";
 import { sendMsg } from "../../redux/actions";
 
 const Item = List.Item;
@@ -8,7 +8,30 @@ const Item = List.Item;
 class Chat extends Component {
   state = {
     content: "",
+    isShow: false //是否显示表情列表
   };
+
+  componentWillMount() {
+    //初始化表情列表数据
+    const emojis = [
+      "😀", "😃", "😄", "😁", "😆", "😅", "🤣", "😂", "🙂", "🙃", "😉", "😊","😇",
+      "🥰", "😍", "😘", "😚", "😙", "🥲", "😋", "😛", "😜", "🤪", "😝", "🤑", "🤗", "🤭", "🤫",
+      "🤔", "🤐", "🤨", "😐", "😑", "😶", "😶‍🌫️", "😏"
+    ];
+    this.emojis = emojis.map(emoji => ({text: emoji}))
+  }
+
+  // 切换表情列表的显示
+  toggleShow = () => {
+    const isShow = !this.state.isShow;
+    this.setState({ isShow });
+    if (isShow) {
+      // 异步手动派发resize 事件,解决表情列表显示的bug
+      setTimeout(() => {
+        window.dispatchEvent(new Event("resize"));
+      }, 0);
+    }
+  }
 
   handleSend = () => {
     const from = this.props.user._id;
@@ -19,7 +42,10 @@ class Chat extends Component {
       this.props.sendMsg({ from, to, content });
     }
     //清除输入数据
-    this.setState({ content: "" });
+    this.setState({ 
+      content: "" ,
+      isShow: false
+    });
   };
 
   render() {
@@ -46,10 +72,7 @@ class Chat extends Component {
             if (targetId === msg.from) {
               //对方发给我的消息
               return (
-                <Item
-                  key={msg._id}
-                  thumb={targetIcon}
-                >
+                <Item key={msg._id} thumb={targetIcon}>
                   {msg.content}
                 </Item>
               );
@@ -68,8 +91,25 @@ class Chat extends Component {
             placeholder="请输入"
             value={this.state.content}
             onChange={(val) => this.setState({ content: val })}
-            extra={<span onClick={this.handleSend}>发送</span>}
+            onFocus={() => this.setState({isShow: false})}
+            extra={
+              <span>
+                <span onClick={this.toggleShow} style={{marginRight:5}}>😀</span>
+                <span onClick={this.handleSend}>发送</span>
+              </span>
+            }
           />
+          {this.state.isShow ? (
+            <Grid
+              data={this.emojis}
+              columnNum={8}
+              carouselMaxRow={4}
+              isCarousel={true}
+              onClick={(item) => {
+                this.setState({ content: this.state.content + item.text });
+              }}
+            />
+          ) : null}
         </div>
       </div>
     );
