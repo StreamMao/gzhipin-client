@@ -68,7 +68,7 @@ class Main extends Component {
             return <Redirect to='/login'/>
         }
         //如果有cookie中有userid，接着读取redux中的user state
-        const {user} = this.props
+        const {user, unReadCount} = this.props
         //如果Redux中user没有_id，返回null(不做任何显示)，等待从后端获取user信息
         if (!user._id) {
             return null
@@ -113,14 +113,14 @@ class Main extends Component {
                     <Route component={NotFound}/>
                 </Switch>
                 {/* 控制底部导航栏出不出现 */}
-                {currentNav ? <NavFooter navList={navList} /> : null}
+                {currentNav ? <NavFooter navList={navList} unReadCount={unReadCount}/> : null}
             </div>
         )
     }
 }
 
 export default connect(
-    state => ({user:state.user}),
+    state => ({user:state.user, unReadCount:state.chat.unReadCount}),
     {getUser}
 )(Main)
 

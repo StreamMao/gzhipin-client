@@ -9,11 +9,12 @@ const Item = TabBar.Item
 // withRouter()
 class NavFooter extends Component {
     static propTypes = {
-        navList: PropTypes.array.isRequired
+        navList: PropTypes.array.isRequired,
+        unReadCount: PropTypes.number.isRequired
     }
   
     render() {
-        let {navList} = this.props
+        let {navList, unReadCount} = this.props
         //过滤掉hidden为true的nav
         navList = navList.filter(nav => !nav.hidden)
         const path = this.props.location.pathname //请求的path
@@ -23,6 +24,7 @@ class NavFooter extends Component {
                     navList.map((nav) => (
                         <Item key={nav.path} 
                             title={nav.title}
+                            badge={nav.path === '/message' ? unReadCount : 0}
                             icon={{uri: require(`./images/${nav.icon}.png`)}}
                             selectedIcon={{uri: require(`./images/${nav.icon}-selected.png`)}}
                             selected={path === nav.path}
