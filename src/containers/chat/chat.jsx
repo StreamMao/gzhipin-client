@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { NavBar, List, InputItem, Grid } from "antd-mobile";
+import { NavBar, List, InputItem, Grid, Icon } from "antd-mobile";
 import { sendMsg } from "../../redux/actions";
 
 const Item = List.Item;
@@ -21,6 +21,16 @@ class Chat extends Component {
     this.emojis = emojis.map(emoji => ({text: emoji}))
   }
 
+  componentDidMount() {
+    // 初始显示列表
+    window.scrollTo(0, document.body.scrollHeight)
+  }
+
+  componentDidUpdate () {
+    // 更新显示列表
+    window.scrollTo(0, document.body.scrollHeight)
+  }
+  
   // 切换表情列表的显示
   toggleShow = () => {
     const isShow = !this.state.isShow;
@@ -66,8 +76,14 @@ class Chat extends Component {
     
     return (
       <div id="chat-page">
-        <NavBar>aa</NavBar>
-        <List>
+        <NavBar 
+          icon={<Icon type='left' />} 
+          className="sticky-header"
+          onLeftClick={() => this.props.history.goBack()}
+          >
+            {users[targetId].username}
+        </NavBar>
+        <List style={{marginTop:50, marginBottom: 50}}>
           {msgs.map((msg) => {
             if (targetId === msg.from) {
               //对方发给我的消息
