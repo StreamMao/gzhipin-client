@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { NavBar, List, InputItem, Grid, Icon } from "antd-mobile";
-import { sendMsg } from "../../redux/actions";
+
+import { sendMsg, readMsg } from "../../redux/actions";
 
 const Item = List.Item;
 
@@ -29,6 +30,13 @@ class Chat extends Component {
   componentDidUpdate () {
     // 更新显示列表
     window.scrollTo(0, document.body.scrollHeight)
+  }
+
+  componentWillUnmount () {
+    //发送请求更新消息的未读状态
+    const from = this.props.match.params.userid;
+    const to = this.props.user._id;
+    this.props.readMsg(from, to)
   }
   
   // 切换表情列表的显示
@@ -84,23 +92,23 @@ class Chat extends Component {
             {users[targetId].username}
         </NavBar>
         <List style={{marginTop:50, marginBottom: 50}}>
-          {msgs.map((msg) => {
-            if (targetId === msg.from) {
-              //对方发给我的消息
-              return (
-                <Item key={msg._id} thumb={targetIcon}>
-                  {msg.content}
-                </Item>
-              );
-            } else {
-              //我发给对方的消息
-              return (
-                <Item key={msg._id} className="chat-me" extra="我">
-                  {msg.content}
-                </Item>
-              );
-            }
-          })}
+            {msgs.map((msg) => {
+              if (targetId === msg.from) {
+                //对方发给我的消息
+                return (
+                  <Item key={msg._id} thumb={targetIcon}>
+                    {msg.content}
+                  </Item>
+                );
+              } else {
+                //我发给对方的消息
+                return (
+                  <Item key={msg._id} className="chat-me" extra="我">
+                    {msg.content}
+                  </Item>
+                );
+              }
+            })}
         </List>
         <div className="am-tab-bar">
           <InputItem
@@ -134,5 +142,5 @@ class Chat extends Component {
 
 export default connect(
   state => ({ user: state.user, chat: state.chat }), 
-  { sendMsg }
+  { sendMsg,readMsg }
 )(Chat);
