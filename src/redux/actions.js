@@ -23,7 +23,7 @@ import {reqRegister,
 1.创建对象之前：判断对象是否已经存在，只有不存在才去创建
 2.创建对象之后：保存对象
 */
-function initIO() {
+function initIO(dispatch, userid) {
   if (!io.socket) {
     // 连接服务器, 得到代表连接的socket 对象
     //  保存对象
@@ -32,13 +32,17 @@ function initIO() {
     // 绑定'receiveMessage'的监听, 来接收服务器发送的消息
     io.socket.on("receiveMsg", function (chatMsg) {
       console.log("浏览器端接收到消息:", chatMsg);
+      //只有当chatMsg是与当前用户相关的消息，才去分发同步action保存消息
+      if (userid === chatMsg.from || userid === chatMsg.to) {
+        dispatch(receiveMsg(chatMsg));
+      }
     });
   }
 }
 
 //异步获取消息列表数据
-async function getMsgList(dispatch) {
-  initIO();
+async function getMsgList(dispatch, userid) {
+  initIO(dispatch, userid);
   const response = await reqChatMsgList();
   const result = response.data;
   if (result.code === 0) {
@@ -71,6 +75,8 @@ export const resetUser = (msg) => ({type: RESET_USER, data: msg})
 export const receiveUserList = (userList) => ({type: RECEIVE_USER_LIST, data: userList})
 //接收消息列表的同步action
 export const receiveMsgList = ({users, chatMsgs}) => ({type: RECEIVE_MSG_LIST, data: {users, chatMsgs}})
+//接收一个消息的同步action
+export const receiveMsg = (chatMsg) => ({ type: RECEIVE_MSG, data: chatMsg });
 
 //注册异步action
 export const register = (user) => {
@@ -98,7 +104,7 @@ export const register = (user) => {
         const response = await reqRegister({username, password, type}) //reqRegister()返回promise, 用await表示“等”response,可以直接得到response. 声明await的语句所在的函数就必须声明成async
         const result = response.data
         if (result.code === 0) { //成功
-            getMsgList(dispatch);
+            getMsgList(dispatch, result.data._id);
             //授权成功的同步action
             dispatch(authSuccess(result.data))
         } else { //失败
@@ -133,7 +139,7 @@ export const login = (user) => {
         const response = await reqLogin(user) //reqRegister()返回promise, 用await表示“等”response,可以直接得到response. 声明await的语句所在的函数就必须声明成async
         const result = response.data
         if (result.code === 0) { //成功
-            getMsgList(dispatch);
+            getMsgList(dispatch, result.data._id);
             //授权成功的同步action
             dispatch(authSuccess(result.data))
         } else { //失败
@@ -163,7 +169,7 @@ export const getUser = () => {
         const response = await reqUser()
         const result = response.data
         if(result.code===0) {//成功
-            getMsgList(dispatch);
+            getMsgList(dispatch, result.data._id);
             dispatch(receiveUser(result.data))
         } else {//失败
             dispatch(resetUser(result.msg))
