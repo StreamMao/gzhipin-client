@@ -1,3 +1,4 @@
+import { io } from "socket.io-client";
 // including a few action creators
 import { AUTH_SUCCESS, ERROR_MSG, RECEIVE_USER, RESET_USER, RECEIVE_USER_LIST } from './action-types'
 import {reqRegister, 
@@ -6,6 +7,35 @@ import {reqRegister,
         reqUser,
         reqUserList
     } from '../api'
+
+
+/* 
+单例对象：
+1.创建对象之前：判断对象是否已经存在，只有不存在才去创建
+2.创建对象之后：保存对象
+*/
+function initIO() {
+  if (!io.socket) {
+    // 连接服务器, 得到代表连接的socket 对象
+    //  保存对象
+    io.socket = io("ws://localhost:4000");
+
+    // 绑定'receiveMessage'的监听, 来接收服务器发送的消息
+    io.socket.on("receiveMsg", function (chatMsg) {
+      console.log("浏览器端接收到消息:", chatMsg);
+    });
+  }
+}
+//发送消息的异步action
+export const sendMsg = ({from, to , content}) => {
+    return dispatch => {
+        console.log('发送消息', {from, to , content})
+        initIO()
+        //发消息
+        io.socket.emit('sendMsg', {from, to , content})
+    }
+}
+
 
 //授权成功的同步action
 const authSuccess = (user) => ({type: AUTH_SUCCESS, data: user})
