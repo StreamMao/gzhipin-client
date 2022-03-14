@@ -1,8 +1,9 @@
 ## How to use
- ###Initailization
- '''npm install'''
- ###Run
-'''npm start'''
+ ### Initailization
+ `npm install`
+ 
+ ### Run
+`npm start`
 
 The backend is in the repository gzhipin-server
 
